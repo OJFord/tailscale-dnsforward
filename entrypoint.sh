@@ -4,6 +4,11 @@ cmd="$@"
 
 dnsmasq --no-daemon --interface="$HOST_INTERFACE" &
 
+# alias/truncate long interface name
+# in sysctl & iptables for example, only first 15ch will be used
+# `ip link` should already have an `altname` for this
+HOST_INTERFACE="${HOST_INTERFACE:0:15}"
+
 # MARK necessary to allow devices behind the subnet router to reach the
 # tailnet with SNAT: https://github.com/tailscale/tailscale/pull/18318
 chain=('--table=mangle' '--insert=FORWARD')
